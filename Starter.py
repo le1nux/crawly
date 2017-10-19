@@ -1,4 +1,6 @@
 import logging
+from logging.handlers import TimedRotatingFileHandler
+
 from Writer import Writer
 from Crawler import Crawler
 from Throttle import Throttle
@@ -20,8 +22,7 @@ def main():
     else:
         config_path = './configs/config.txt'
 
-    config_file = Path(config_path)
-    if not config_file.is_file():
+    if not Path(config_path).is_file():
         logging.error("Could not find config file!")
         sys.exit(1)     # exiting with error code
 
@@ -29,8 +30,15 @@ def main():
     config = configparser.ConfigParser()
     config.read(config_path)
 
+
     log_dir = config['PATHS']['log_dir']
-    file_handler = logging.FileHandler(log_dir)
+
+    # check if config dir is present
+    if not Path(log_dir).is_dir():
+        logging.error("Logging directory is not present!")
+        sys.exit(1)     # exiting with error code
+
+    file_handler = TimedRotatingFileHandler(os.path.join(os.path.dirname(__file__), log_dir, 'logs'), when='midnight', interval=1)
     console_handler = logging.StreamHandler()
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -47,6 +55,8 @@ def main():
 
 
     logger.info("=======Starting=Crawler=========")
+
+    # store config preferences in variables
     article_download_pattern = ([(int(config['ARTICLE_DOWNLOAD_PATTERN']['number']), int(config['ARTICLE_DOWNLOAD_PATTERN']['delay'])),])   # [(application number, period in seconds) ... ]
     number_download_worker = int(config['CRAWLING']['number_download_worker'])
     website_request_timeout = int(config['REQUESTS']['website_request_timeout'])
@@ -57,15 +67,25 @@ def main():
     downloads_path = config['PATHS']['downloads']
     crawled_rss_articles_path = config['PATHS']['rss_articles']
     feed_path = config['PATHS']['feeds_list']
-    requests = config['PATHS']['requests']
+    requests_path = config['PATHS']['requests']
+
+    # partly validating the config
+    if not Path(feed_path).is_file():
+        logging.error("Could not find RSS feeds list file!")
+        sys.exit(1)     # exiting with error code
+
+    requests_file_path = Path(requests_path)
+    if not Path(os.path.dirname(requests_file_path)).is_dir():
+        logging.error("Could not find requests directory!")
+        sys.exit(1)     # exiting with error code
 
     writer = Writer()
     writer.start()
 
     throttle = Throttle(request_velocity=throttle_velocity)
 
-    rss_requester = Requester(tag="RSS Requester", path=requests, throttle=throttle)
-    website_requester = Requester(tag="Website Requester", path=requests, throttle=throttle)
+    rss_requester = Requester(tag="RSS Requester", path=requests_path, throttle=throttle)
+    website_requester = Requester(tag="Website Requester", path=requests_path, throttle=throttle)
 
     scheduler = Scheduler(patterns=article_download_pattern)
 

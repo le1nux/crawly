@@ -11,12 +11,20 @@ import sys
 import threading
 import psutil
 import os
+from pathlib import Path
+
 
 def main():
     if len(sys.argv) > 1:
         config_path = sys.argv[1]
     else:
         config_path = './configs/config.txt'
+
+    config_file = Path(config_path)
+    if not config_file.is_file():
+        logging.error("Could not find config file!")
+        sys.exit(1)     # exiting with error code
+
     # load config
     config = configparser.ConfigParser()
     config.read(config_path)

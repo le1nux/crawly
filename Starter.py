@@ -20,7 +20,7 @@ def main():
     if len(sys.argv) > 1:
         config_path = sys.argv[1]
     else:
-        config_path = './configs/config.txt'
+        config_path = './configs/config_default.txt'
 
     if not Path(config_path).is_file():
         logging.error("Could not find config file!")

@@ -17,7 +17,7 @@ rss_articles = ./dump/crawled_articles_?.csv
 requests = ./dump/requests_?.csv
 
 # Path to feeds list
-feeds_list = ./resources/feeds_list.csv
+feeds_list = ./resources/example_feed_list.csv
 
 # Path to log directory
 log_dir = ./logs

@@ -9,39 +9,40 @@ Since some articles may be modified / corrected later on, _crawly_ can download 
 
 
 # Getting started
-Clone the repository 
-```bash
-git clone git@github.com:le1nux/crawly.git
-```
-After having installed the required python packages (see ) and having configured crawly (see ) you can run *crawly* 
 
+Clone the repository
+```bash
+git clone https://github.com/le1nux/crawly.git
+```
+and create the following directories: 
+```bash
+cd crawly
+mkdir logs
+mkdir resources
+mkdir dump
+```
+Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
+```bash
+cd crawly
+pip install requirements.txt
+```
+
+Start _crawly_:
 ```bash
 python3 Starter.py configs/your_config.txt
 ```
 
-# Requirements
-
-Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
-
-```bash
-cd foo/bar/crawly
-pip install requirements.txt
-```
 
 # Configuration
-You can leave all the preferences as they are defined in the [template](https://github.com/le1nux/crawly/blob/master/configs/config_default.txt) except for
-
+_crawly_ comes with a sane [default configuration](https://github.com/le1nux/crawly/blob/master/configs/config_default.txt). To set up feeds to crawl, set the path accordingly:
 ```python
 # Path to feeds list
-feeds_list = ./resources/feeds_list.csv
+feeds_list = ./resources/example_feed_list.csv
 ```
-which must have the correct path to your feeds list. 
 
-If you keep the template's preferences *crawly* will retrieve all RSS feeds in 3 minutes intervals and download new articles every 10 mins for 1 hour (-> 7 times in total).
+If you keep the default configuration, _crawly_ will retrieve all RSS feeds in 3-minute intervals and download new articles every 10 mins for 1 hour (-> 7 times in total).
 
-IMPORTANT: 
+**IMPORTANT** 
 
 All temporal settings are in seconds.
-Always keep defensive crawling intervals preferably in the minutes area.
-
-
+Always keep defensive crawling intervals; preferably in the minutes area.

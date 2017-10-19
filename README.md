@@ -21,7 +21,7 @@ python3 Starter.py configs/your_config.txt
 
 # Requirements
 
-Install the [required packages](https://github.com/le1nux/crawly/requirements.txt) by running
+Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
 
 ```bash
 cd foo/bar/crawly
@@ -29,7 +29,7 @@ pip install requirements.txt
 ```
 
 # Configuration
-You can leave all the preferences as they are defined in the [template](https://github.com/le1nux/crawly/configs/config_default.txt) except for
+You can leave all the preferences as they are defined in the [template](https://github.com/le1nux/crawly/blob/master/configs/config_default.txt) except for
 
 ```python
 # Path to feeds list

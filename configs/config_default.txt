@@ -1,25 +1,26 @@
 [PATHS]
-# Paths to resources. Note that all paths include the corresponding file name.
-# Some of the paths' files contain a question mark (?) which replaces the crawler by the current date
-# That is why you get one dump file per day.
-# NOTE: Always keep the file format. Paths without file names or file names without the question mark (if required) will lead to errors!
+# Paths to resources.
+# Some of the paths' files contain a question mark (?) which replaces the crawler by the current date.
 
-# Path where the article downloads are dumped
+# Path where the article downloads are dumped.
+# Always provide the path including the file name with the question mark.
 downloads = ./dump/website_downloads_?.csv
 
 # The crawler stores all the RSS feed items of all RSS feeds here.
 # There is no check if a specific article is already present in the dump, so in general each article (RSS item) is stored many times.
+# Always provide the path including the file name with the question mark.
 rss_articles = ./dump/crawled_articles_?.csv
 
 # Path where responses of all HTTP requests are dumped.
 # If the RSS feed dump or the article download dump is erroneous this dump can be used to restore your data set.
+# Always provide the path including the file name with the question mark.
 requests = ./dump/requests_?.csv
 
 # Path to feeds list
 feeds_list = ./resources/feeds_list.csv
 
-# Path to log file
-log_dir = ./logs/logging.log
+# Path to log directory
+log_dir = ./logs
 
 
 [REQUESTS]

@@ -1,0 +1,5 @@
+outlet,outlet_url,country,feed_url,schedule
+"Spiegel Online","http://www.spiegel.de",DE,http://www.spiegel.de/international/business/index.rss,1
+"Spiegel Online","http://www.spiegel.de",DE,http://www.spiegel.de/international/world/index.rss,1
+
+

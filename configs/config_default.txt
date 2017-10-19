@@ -1,0 +1,55 @@
+[PATHS]
+# Paths to resources. Note that all paths include the corresponding file name.
+# Some of the paths' files contain a question mark (?) which replaces the crawler by the current date
+# That is why you get one dump file per day.
+# NOTE: Always keep the file format. Paths without file names or file names without the question mark (if required) will lead to errors!
+
+# Path where the article downloads are dumped
+downloads = ./dump/website_downloads_?.csv
+
+# The crawler stores all the RSS feed items of all RSS feeds here.
+# There is no check if a specific article is already present in the dump, so in general each article (RSS item) is stored many times.
+rss_articles = ./dump/crawled_articles_?.csv
+
+# Path where responses of all HTTP requests are dumped.
+# If the RSS feed dump or the article download dump is erroneous this dump can be used to restore your data set.
+requests = ./dump/requests_?.csv
+
+# Path to feeds list
+feeds_list = ./resources/feeds_list.csv
+
+# Path to log file
+log_dir = ./logs/logging.log
+
+
+[REQUESTS]
+# Website request timeout in seconds
+website_request_timeout = 5
+
+# RSS feed request timeout in seconds
+rss_feed_request_timeout = 3
+
+
+[CRAWLING]
+# Interval for crawling all rss feeds in seconds
+rss_feed_crawl_period = 240
+
+# Number of threads downloading the articles
+number_download_worker = 3
+
+# Number of iterations to collect the articles that are already present.
+# If you set this to 0 all articles that are present in the RSS feeds will be downloaded
+# which means really high trafic at the start of the crawler.
+warmup_iterations = 2
+
+# Minimum number of seconds between two requests to a domain
+# We strongly discourage you from setting this to 0 as this would disable the throttle and you therefore might overload the server with requests.
+throttle_velocity = 2
+
+
+[ARTICLE_DOWNLOAD_PATTERN]
+# number of downloads per article
+number = 7
+
+# delay between each download in seconds
+delay = 600

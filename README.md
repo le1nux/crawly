@@ -24,7 +24,7 @@ mkdir dump
 Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
 ```bash
 cd crawly
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 Start _crawly_:

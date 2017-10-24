@@ -2,8 +2,7 @@ import requests
 from time import gmtime, strftime
 import logging
 from Writer import writer_queue
-import random
-import string
+import time
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -33,7 +32,7 @@ class Requester:
                 status = r.status_code
                 text = r.text
             if self.log:
-                line = [self.tag, url, text, status, error]
+                line = [time.time(), self.tag, url, text, status, error]
                 self.write_log(line)
         return status, text
 

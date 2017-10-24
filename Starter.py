@@ -32,13 +32,14 @@ def main():
 
 
     log_dir = config['PATHS']['log_dir']
+    log_file_name = config['PATHS']['log_file_name']
 
     # check if config dir is present
     if not Path(log_dir).is_dir():
         logging.error("Logging directory is not present!")
         sys.exit(1)     # exiting with error code
 
-    file_handler = TimedRotatingFileHandler(os.path.join(os.path.dirname(__file__), log_dir, 'logs'), when='midnight', interval=1)
+    file_handler = TimedRotatingFileHandler(os.path.join(os.path.dirname(__file__), log_dir, log_file_name), when='midnight', interval=1)
     console_handler = logging.StreamHandler()
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -74,7 +75,7 @@ def main():
         logging.error("Could not find RSS feeds list file!")
         sys.exit(1)     # exiting with error code
 
-    requests_file_path = Path(requests_path)
+    requests_file_path = Path(os.path.abspath(requests_path))
     if not Path(os.path.dirname(requests_file_path)).is_dir():
         logging.error("Could not find requests directory!")
         sys.exit(1)     # exiting with error code

@@ -22,6 +22,8 @@ feeds_list = ./resources/example_feed_list.csv
 # Path to log directory
 log_dir = ./logs
 
+# name of the logfile; will be appended by current date
+log_file_name = log_default
 
 [REQUESTS]
 # Website request timeout in seconds

@@ -9,39 +9,64 @@ Since some articles may be modified / corrected later on, _crawly_ can download 
 
 
 # Getting started
-Clone the repository 
-```bash
-git clone git@github.com:le1nux/crawly.git
-```
-After having installed the required python packages (see ) and having configured crawly (see ) you can run *crawly* 
 
+Clone the repository
+```bash
+git clone https://github.com/le1nux/crawly.git
+```
+and create the following directories: 
+```bash
+cd crawly
+mkdir logs
+mkdir resources
+mkdir dump
+```
+Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
+```bash
+cd crawly
+pip install -r requirements.txt
+```
+
+Start _crawly_:
 ```bash
 python3 Starter.py configs/your_config.txt
 ```
 
-# Requirements
-
-Install the [required packages](https://github.com/le1nux/crawly/blob/master/requirements.txt) by running
-
-```bash
-cd foo/bar/crawly
-pip install requirements.txt
-```
 
 # Configuration
-You can leave all the preferences as they are defined in the [template](https://github.com/le1nux/crawly/blob/master/configs/config_default.txt) except for
-
+_crawly_ comes with a sane [default configuration](https://github.com/le1nux/crawly/blob/master/configs/config_default.txt). To set up feeds to crawl, set the path accordingly:
 ```python
 # Path to feeds list
-feeds_list = ./resources/feeds_list.csv
+feeds_list = ./resources/example_feed_list.csv
 ```
-which must have the correct path to your feeds list. 
 
-If you keep the template's preferences *crawly* will retrieve all RSS feeds in 3 minutes intervals and download new articles every 10 mins for 1 hour (-> 7 times in total).
+If you keep the default configuration, _crawly_ will retrieve all RSS feeds in 3-minute intervals and download new articles every 10 mins for 1 hour (-> 7 times in total).
 
-IMPORTANT: 
+**IMPORTANT** 
 
 All temporal settings are in seconds.
-Always keep defensive crawling intervals preferably in the minutes area.
+Always keep defensive crawling intervals; preferably in the minutes area.
 
+# License
 
+MIT License
+
+Copyright (c) 2017 le1nux
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

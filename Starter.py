@@ -75,8 +75,8 @@ def main():
         logging.error("Could not find RSS feeds list file!")
         sys.exit(1)     # exiting with error code
 
-    requests_file_path = Path(os.path.abspath(requests_path))
-    if not Path(os.path.dirname(requests_file_path)).is_dir():
+    parent_dir = os.path.dirname(requests_path)
+    if not Path(parent_dir).is_dir():
         logging.error("Could not find requests directory!")
         sys.exit(1)     # exiting with error code
 

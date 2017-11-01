@@ -65,6 +65,7 @@ def main():
     rss_feed_request_timeout = int(config['REQUESTS']['rss_feed_request_timeout'])
     warmup_iterations = int(config['CRAWLING']['warmup_iterations'])
     throttle_velocity = float(config['CRAWLING']['throttle_velocity'])
+    max_offset = int(config['CRAWLING']['max_offset'])
     downloads_path = config['PATHS']['downloads']
     crawled_rss_articles_path = config['PATHS']['rss_articles']
     feed_path = config['PATHS']['feeds_list']
@@ -93,7 +94,7 @@ def main():
     crawler = Crawler(requester=rss_requester, scheduler=scheduler, feed_path=feed_path,
                       crawled_rss_articles_path=crawled_rss_articles_path,
                       rss_feed_crawl_period=rss_feed_crawl_period, rss_feed_request_timeout=rss_feed_request_timeout,
-                      warmup_iterations=warmup_iterations)
+                      warmup_iterations=warmup_iterations, max_offset=max_offset)
     crawler.start()
 
     for i in range(number_download_worker):

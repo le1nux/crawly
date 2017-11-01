@@ -4,6 +4,7 @@ import hashlib
 import time
 import threading
 import feedparser
+import random
 from dateutil import parser as date_parser
 from Writer import writer_queue
 from time import gmtime, strftime
@@ -17,6 +18,11 @@ pd.set_option('display.width', 1000)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+# This is the maximum time in seconds that an outlet crawler can be delayed.
+# Each OutletCrawler is now being delayed by a random number between [0, MAXOFFSET] such that
+# DNS and the network itself does not get overwhelmed when the Crawler starts a crawling iteration step.
+# NOTE: MAX_OFFSET must be less than (<<) the duration of iteration step!
+MAX_OFFSET = 10
 
 class Crawler(Thread):
     def __init__(self, requester, scheduler, feed_path="./resources/news_feeds.csv", crawled_rss_articles_path="./dump/crawled_articles_?.csv",
@@ -60,8 +66,6 @@ class Crawler(Thread):
             logger.info("Running warmup %d/%d", i + 1, iterations)
             feeds_df, old_hash = self.update_feeds(feeds_df, old_hash)
             logger.info("Retrieving %s RSS feeds...", feeds_df["feed_url"].count())
-            list(map(lambda crawler: crawler.stop(), self.outlet_crawlers))
-            self.outlet_crawlers = []
             self.crawl_outlets(feeds_df, warmup=True)
             next_crawl = next_crawl + self.rss_feed_crawl_period
             delay = next_crawl - time.time()
@@ -76,8 +80,6 @@ class Crawler(Thread):
         while True:
             feeds_df, old_hash = self.update_feeds(feeds_df, old_hash)
             logger.info("Retrieving %s RSS feeds...", feeds_df["feed_url"].count())
-            list(map(lambda crawler: crawler.stop(), self.outlet_crawlers))
-            self.outlet_crawlers = []
             self.crawl_outlets(feeds_df, warmup=False)
             next_crawl = next_crawl + self.rss_feed_crawl_period
             delay = next_crawl - time.time()
@@ -85,21 +87,25 @@ class Crawler(Thread):
             time.sleep(delay)
 
     def crawl_outlets(self, feeds_all, warmup=False):
+        list(map(lambda crawler: crawler.stop(), self.outlet_crawlers))
+        self.outlet_crawlers = []
         grouped_feeds = feeds_all.groupby(['outlet'], axis=0)
         for outlet_name, feeds_outlet in grouped_feeds:
             logger.debug("Crawling %s", outlet_name)
+            offset = random.random() * MAX_OFFSET
             outlet_crawler = OutletCrawler(outlet_name=outlet_name,
                                            feeds=feeds_outlet,
                                            scheduler=self.scheduler,
                                            requester=self.requester,
                                            rss_feed_request_timeout=self.rss_feed_request_timeout,
                                            crawled_rss_articles_path=self.crawled_rss_articles_path,
-                                           warmup=warmup)
+                                           warmup=warmup,
+                                           offset=offset)
             self.outlet_crawlers.append(outlet_crawler)
             outlet_crawler.start()
 
 class OutletCrawler(Thread):
-    def __init__(self, outlet_name, feeds, scheduler, requester, rss_feed_request_timeout, crawled_rss_articles_path, warmup=False):
+    def __init__(self, outlet_name, feeds, scheduler, requester, rss_feed_request_timeout, crawled_rss_articles_path, warmup=False, offset=0):
         super(OutletCrawler, self).__init__()
         self._stop_event = threading.Event()
         self.outlet_name = outlet_name
@@ -109,8 +115,11 @@ class OutletCrawler(Thread):
         self.warmup = warmup
         self.crawled_rss_articles_path = crawled_rss_articles_path
         self.rss_feed_request_timeout = rss_feed_request_timeout
+        self.offset = offset
 
     def run(self):
+        time.sleep(self.offset)
+        logger.debug("offset sleeping for %.2fs done", self.offset)
         if self.warmup:
             self.doWarmup()
         else:

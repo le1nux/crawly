@@ -49,6 +49,12 @@ warmup_iterations = 2
 # We strongly discourage you from setting this to 0 as this would disable the throttle and you therefore might overload the server with requests.
 throttle_velocity = 2
 
+# This is the maximum time in seconds that an outlet crawler can be delayed.
+# Each OutletCrawler is now being delayed by a random number between [0, max_offset] such that
+# DNS and the network itself does not get overwhelmed when the Crawler starts a crawling iteration step.
+# NOTE: max_offset must be less than (<<) the duration of iteration step!
+max_offset = 60
+
 
 [ARTICLE_DOWNLOAD_PATTERN]
 # number of downloads per article

@@ -18,15 +18,9 @@ pd.set_option('display.width', 1000)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# This is the maximum time in seconds that an outlet crawler can be delayed.
-# Each OutletCrawler is now being delayed by a random number between [0, MAXOFFSET] such that
-# DNS and the network itself does not get overwhelmed when the Crawler starts a crawling iteration step.
-# NOTE: MAX_OFFSET must be less than (<<) the duration of iteration step!
-MAX_OFFSET = 10
-
 class Crawler(Thread):
     def __init__(self, requester, scheduler, feed_path="./resources/news_feeds.csv", crawled_rss_articles_path="./dump/crawled_articles_?.csv",
-                 rss_feed_crawl_period=300, rss_feed_request_timeout=5, warmup_iterations=3):
+                 rss_feed_crawl_period=300, rss_feed_request_timeout=5, warmup_iterations=3, max_offset=0):
         super(Crawler, self).__init__()
         self.requester = requester
         self.feed_path = feed_path
@@ -36,6 +30,11 @@ class Crawler(Thread):
         self.scheduler = scheduler
         self.outlet_crawlers = []
         self.warmup_iterations = warmup_iterations
+        # This is the maximum time in seconds that an outlet crawler can be delayed.
+        # Each OutletCrawler is now being delayed by a random number between [0, max_offset] such that
+        # DNS and the network itself does not get overwhelmed when the Crawler starts a crawling iteration step.
+        # NOTE: max_offset must be less than (<<) the duration of iteration step!
+        self.max_offset = max_offset
 
     def update_feeds(self, feeds_all, old_hash):
         try:
@@ -92,7 +91,7 @@ class Crawler(Thread):
         grouped_feeds = feeds_all.groupby(['outlet'], axis=0)
         for outlet_name, feeds_outlet in grouped_feeds:
             logger.debug("Crawling %s", outlet_name)
-            offset = random.random() * MAX_OFFSET
+            offset = random.random() * self.max_offset
             outlet_crawler = OutletCrawler(outlet_name=outlet_name,
                                            feeds=feeds_outlet,
                                            scheduler=self.scheduler,

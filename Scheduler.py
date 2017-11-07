@@ -21,7 +21,7 @@ class Scheduler():
         self.ap_scheduler = BackgroundScheduler()
         self.ap_scheduler.start()
 
-    def schedule(self, article_link, schedule_mode):
+    def schedule(self, article_link, feed_url, schedule_mode):
         # print("known urls size: ", sys.getsizeof(self.known_urls), " entries: ", len(self.known_urls.keys()))
         if article_link in self.known_urls:
             self.known_urls[article_link] = time.time()  # store last access time
@@ -34,13 +34,14 @@ class Scheduler():
                         for i in range(pattern[0]):
                             offset = pattern[1] + random.uniform(-5, 5)
                             run_date = datetime.fromtimestamp(last_scheduled_time + offset)
-                            self.ap_scheduler.add_job(func=due_job_queue.put, trigger='date', args=(article_link,),
+
+                            self.ap_scheduler.add_job(func=due_job_queue.put, trigger='date', args=([article_link, feed_url],),
                                                       run_date=run_date, misfire_grace_time=20)
                             last_scheduled_time = last_scheduled_time + pattern[1]
                     logger.debug("No. of scheduled jobs: %d", len(self.ap_scheduler.get_jobs()))
                 elif schedule_mode == 2:
                     run_date = datetime.fromtimestamp(time.time())
-                    self.ap_scheduler.add_job(func=due_job_queue.put, trigger='date', args=(article_link,),
+                    self.ap_scheduler.add_job(func=due_job_queue.put, trigger='date', args=([article_link, feed_url],),
                                               run_date=run_date, misfire_grace_time=20)
 
     def add_known_urls(self, urls):

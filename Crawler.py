@@ -147,7 +147,7 @@ class OutletCrawler(Thread):
             else:
                 feed_url = feed["feed_url"]
                 articles = self.get_feed(feed_url)
-                list(map(lambda article: self.scheduler.schedule(article[3], schedule_mode=int(feed[4])), articles))
+                list(map(lambda article: self.scheduler.schedule(article[3], feed_url, schedule_mode=int(feed[4])), articles))
                 list(map(lambda article : writer_queue.put(
                     {
                         "path": self.crawled_rss_articles_path.replace('?', strftime("%Y-%m-%d", gmtime())),

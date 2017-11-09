@@ -28,7 +28,7 @@ class DownloadWorker(Thread):
             status_code, content = self.requester.request(url=article_url, timeout=self.timeout)
             if status_code == 200:
                 logger.debug("Retrieved article %s", article_url)
-                download = [time.time(), article_url, feed_url, content]
+                download = [time.time(), feed_url, article_url, content]
                 job = {
                     "path": self.path.replace('?', strftime("%Y-%m-%d", gmtime())),
                     "line": download

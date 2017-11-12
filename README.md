@@ -81,7 +81,7 @@ The last three columns are directly extracted from the RSS item itself. See [her
 This file contains the articles downloaded from the outlet website and has the following CSV file format:
 
 ```
-timestamp_retrieved, link_to_article, feed_url, html_download
+timestamp_retrieved, feed_url, link_to_article, html_download
 ```
 # Suggested Reading
 

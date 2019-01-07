@@ -1,5 +1,5 @@
 # Crawly
-... a crawler that retrieves news articles via RSS feeds.
+... a crawler written in Python that retrieves news articles via RSS feeds.
 
 # Description
 _Crawly_ retrieves RSS feeds in a pre-defined interval and checks whether there are any new RSS items present. 

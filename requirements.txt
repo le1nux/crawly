@@ -1,5 +1,5 @@
 APScheduler==3.3.1
 feedparser==5.2.1
 pandas==0.20.1
-psutil==5.2.2
+psutil==5.6.6
 requests==2.20.0
